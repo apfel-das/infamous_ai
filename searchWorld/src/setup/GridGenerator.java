@@ -12,6 +12,7 @@ package setup;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,15 +66,19 @@ class GridGenerator{
 			switch(ch) 
 			{
 				case "v":
-					VisualizeGrid(frame,N,M,mygrid.getWalls(),mygrid.getGrass(),mygrid.getStartidx(),mygrid.getTerminalidx());
+					VisualizeGrid("Initial Maze",N,M,mygrid.getWalls(),mygrid.getGrass(),mygrid.getStartidx(),mygrid.getTerminalidx());
 					
 					break;
 				case "b":
 					int [] path = BFS(mygrid,N,M);
 					
-					VisualizeGrid(frame,N,M,mygrid.getWalls(),mygrid.getGrass(),path,mygrid.getStartidx(),mygrid.getTerminalidx());
+					VisualizeGrid("BFS Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),path,mygrid.getStartidx(),mygrid.getTerminalidx());
 					break;
+				case "d":
+					int [] path_d = DFS(mygrid,N,M);
 					
+					VisualizeGrid("DFS Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),path_d,mygrid.getStartidx(),mygrid.getTerminalidx());
+					break;	
 				default:
 				
 			}
@@ -232,6 +237,100 @@ class GridGenerator{
 	}
 	
 	
+	private static int[] DFS(Grid mygrid, int N, int M) 
+	{
+		//will be filled up with the solution - path as Nodes.
+		ArrayList<Integer> solution = new ArrayList<Integer>();
+		
+		//a structure to remeber visited nodes.
+		boolean [][] visited = new boolean [N][M];
+		//mark the walls.
+		for(int i = 0; i<N; i++) 
+		{
+			for(int j=0; j<M; j++) 
+			{
+				//a wall will never be visited after all.
+				if(mygrid.getCell(i, j).isWall())
+					visited[i][j] = true;
+				else
+					visited[i][j] = false;
+				
+				
+			}
+		}
+		
+		//a stack object.
+		Stack<Node> stack = new Stack<>();
+		//the root Node.
+		Node src = new Node(mygrid.getStart()[0], mygrid.getStart()[1]);
+		
+		//pushing in the src.
+		stack.push(src);
+		
+		//traverse
+		while(!stack.isEmpty()) 
+		{
+			Node curr = stack.pop();
+			Node c;
+			
+			//solved.
+			if(mygrid.getCell(curr.getRow(),curr.getCol()).isTerminal())
+			{
+				
+				while(curr.getParent() != null) 
+				{
+					solution.add(curr.getRow()*M + curr.getCol());
+					curr = curr.getParent();
+				}
+			}
+			
+			if(curr.getRow() < 0 || curr.getCol() < 0 || curr.getCol() >= M || curr.getRow() >= N)
+				continue;
+			
+			//moving
+			
+			//up
+			if(curr.getRow()-1 >= 0 && visited[curr.getRow()-1][curr.getCol()] == false) 
+			{
+				visited[curr.getRow()-1][curr.getCol()] = true;
+				c = new Node(curr.getRow()-1, curr.getCol());
+				c.setParent(curr);
+				stack.push(c);
+			}
+			//down
+			if(curr.getRow()+1 >= 0 && curr.getRow()+1 < N && visited[curr.getRow()+1][curr.getCol()] == false) 
+			{
+				visited[curr.getRow()+1][curr.getCol()] = true;
+				c = new Node(curr.getRow()+1, curr.getCol());
+				c.setParent(curr);
+				stack.push(c);
+			}
+			//left
+			if(curr.getCol()-1 >= 0 && visited[curr.getRow()][curr.getCol()-1] == false) 
+			{
+				visited[curr.getRow()][curr.getCol()-1] = true;
+				c = new Node(curr.getRow(), curr.getCol()-1);
+				c.setParent(curr);
+				stack.push(c);
+			}
+			//right
+			
+			if(curr.getCol()+1 >= 0 && curr.getCol() + 1 < M && visited[curr.getRow()][curr.getCol()+1] == false) 
+			{
+				visited[curr.getRow()][curr.getCol()+1] = true;
+				c = new Node(curr.getRow(), curr.getCol()+1);
+				c.setParent(curr);
+				stack.push(c);
+			}
+			
+		}
+		
+		
+		//using Java > 8 will do the work here. Conversion of the ArrayList to int[] primitive, filtering out the null_values via lamda function.
+		int[] arr = solution.stream().filter(i -> i != null).mapToInt(i -> i).toArray();
+		
+		return arr;
+	}
 	
 	
 	/**
