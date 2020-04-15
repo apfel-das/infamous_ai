@@ -6,6 +6,7 @@ public class Node {
 	private int col;
 	private int dist;
 	private Node parent;
+	private int cost;
 	
 	public Node(int i, int j) 
 	{
@@ -14,6 +15,15 @@ public class Node {
 		dist = 0;
 	}
 	
+	public int getCost() 
+	{
+		return cost;
+	}
+	
+	public void setCost(int c) 
+	{
+		cost = c;
+	}
 	
 	public Node getParent() 
 	{
