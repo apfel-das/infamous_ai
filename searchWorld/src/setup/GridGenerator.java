@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.*;
 
+
+import searchOps.AStar;
 import searchOps.searchBFS;
 import searchOps.searchDFS;
 
@@ -25,7 +27,6 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.awt.Canvas; 
 
 class GridGenerator{
@@ -57,6 +58,7 @@ class GridGenerator{
 		
 		do
 		{
+			int gCost = 0;
 			menuPrint();
 			System.out.println();
 			System.out.print("CMD> ");
@@ -76,6 +78,17 @@ class GridGenerator{
 					break;
 				case "b":
 					
+					
+					
+					// initalize grass cost.
+					while(gCost != 2 && gCost != 10)
+					{
+						System.out.println("Choose your preferable Grass Cost [2/10]");
+						gCost = Integer.parseInt(in.nextLine().trim());
+						System.out.println(gCost);
+						
+					}
+					
 					searchBFS bfs =  new searchBFS();
 					Node goal = bfs.solve(mygrid, N, M);
 					ArrayList<Node> path = bfs.backtrack(goal);
@@ -90,7 +103,7 @@ class GridGenerator{
 						if(c == 'y')
 						{
 							
-							System.out.println("Tuples or Visual? [t/v]");
+							System.out.println("Tuples or Visual? [T/v]");
 							c = in.next().charAt(0);
 							if(c == 't') 
 								printPath(path);
@@ -113,6 +126,17 @@ class GridGenerator{
 					in.nextLine();
 					break;
 				case "d":
+					
+					
+					// initalize grass cost.
+					while(gCost != 2 && gCost != 10)
+					{
+						System.out.println("Choose your preferable Grass Cost [2/10]");
+						gCost = Integer.parseInt(in.nextLine().trim());
+						System.out.println(gCost);
+						
+					}
+					
 					searchDFS dfs =  new searchDFS();
 					Node goalDFS = dfs.solve(mygrid, N, M);
 					ArrayList<Node> pathDFS = dfs.backtrack(goalDFS);
@@ -149,7 +173,57 @@ class GridGenerator{
 					in.nextLine();
 					
 					
-					break;	
+					break;
+				case "a":
+					
+					
+					// initalize grass cost.
+					while(gCost != 2 && gCost != 10)
+					{
+						System.out.println("Choose your preferable Grass Cost [2/10]");
+						gCost = Integer.parseInt(in.nextLine().trim());
+						System.out.println(gCost);
+						
+					}
+					
+					
+					AStar aStar =  new AStar(gCost);
+					Node goalStar = aStar.solve(mygrid, N, M);
+					ArrayList<Node> pathStar = aStar.backtrack(goalStar);
+					
+					if(goalStar != null) 
+					{
+						
+						System.out.println("Path found [via A*]. Print solution? [Y/n] ");
+						char c = in.next().charAt(0);
+					
+						if(c == 'y')
+						{
+							
+							System.out.println("Tuples or Visual? [t/v]");
+							c = in.next().charAt(0);
+							if(c == 't') 
+								printPath(pathStar);
+							else if(c == 'v')
+								VisualizeGrid("A* Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(pathStar,M),mygrid.getStartidx(),mygrid.getTerminalidx());
+							else
+								break;
+							
+						}
+				
+						
+						
+					}
+					else 
+					{
+						//No solution was found.
+						System.out.println("No solution found.");
+					}
+					
+					in.nextLine();
+					
+					
+					break;		
 				default:
 					System.out.println("Bad Command");
 				
@@ -178,33 +252,11 @@ class GridGenerator{
 		
 		System.out.println("\nType a command or q (Exit):");
 		System.out.println("\"v\" - Visualize the given maze.");
-		System.out.println("b - Solve the given maze with BFS.");
-		System.out.println("d - Solve the given maze with DFS.");
-		System.out.println("a - Solve the given maze with A*.");
+		System.out.println("\"b\" - Solve the given maze with BFS.");
+		System.out.println("\"d\" - Solve the given maze with DFS.");
+		System.out.println("\"a\" - Solve the given maze with A*.");
 		
 	}
-	
-	// estimate input's validity via a regex.
-	private static boolean isValidCmd(String cmd) 
-	{
-		String valid = "[abdvq]";
-		
-		Matcher m = Pattern.compile(valid).matcher(cmd);
-		
-		if(!m.matches()) 
-		{
-			System.out.println("Bad Command");
-			return false;
-		}
-		
-		return true;
-		
-		
-	}
-	
-	
-
-
 	
 	/**
 	 * Converts given path to an Array format by escaping null-elements.Uses a lambda-expression and some Java 13 magic.Converts (i,j) -> i*M+j format.
@@ -270,6 +322,12 @@ class GridGenerator{
 		}
 		
 	}
+	
+	
+	
+	
+	
+	
 	/*
 	 *  Visualization functions
 	 */

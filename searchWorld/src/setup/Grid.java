@@ -85,20 +85,7 @@ public class Grid {
 	public int[] getWalls(){return this.walls;}
 	public int[] getGrass(){return this.grass;}
 
-	/**
-	 * @author dasApfel
-	 */
-	public void print() 
-	{
-		for(int i =0; i < N; i++) 
-		{
-			for(int j = 0; j < M; j++) 
-			{
-				System.out.format("%2s ",mygrid[i][j]);
-			}
-			System.out.println();
-		}
-	}
+	
 	private void storeWorld(){
 		try{
 			File f = new File("newRandomLevel.world");

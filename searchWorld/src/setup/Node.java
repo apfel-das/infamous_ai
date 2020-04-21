@@ -4,26 +4,16 @@ public class Node {
 
 	private int row;
 	private int col;
-	private int dist;
 	private Node parent;
-	private int cost;
+	
 	
 	public Node(int i, int j) 
 	{
 		row = i;
 		col = j;
-		dist = 0;
+	
 	}
 	
-	public int getCost() 
-	{
-		return cost;
-	}
-	
-	public void setCost(int c) 
-	{
-		cost = c;
-	}
 	
 	public Node getParent() 
 	{
@@ -44,14 +34,19 @@ public class Node {
 		return col;
 	}
 	
-	public void setDist(int d) 
+	public boolean equals(Object o) 
 	{
-		dist = d;
+		Node n = (Node ) o;
+		return this.row == n.getRow() && this.col == n.getCol();
 	}
-	public int getDist() 
-	{
-		return dist;
-	}
+	
+	public int hashCode() {
+        int hash = 5;
+        hash = 13 * hash + this.row;
+        hash = 13 * hash + this.col;
+       
+        return hash;
+    }
 	
 	public String toString() 
 	{
