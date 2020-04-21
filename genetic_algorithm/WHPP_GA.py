@@ -1,5 +1,12 @@
 import numpy as np
-import random
+import random,math
+
+"""
+Project_name: WHHP genetic algorithm
+Subject:	  Artificial Intelligence
+Engineer:	  Christos Trimas
+"""
+
 
 def create_pop(population_size,days,employees):
 	
@@ -185,7 +192,7 @@ def selection(passsed_chromosomes):
 	tmp = 0
 	for i in range(1,len(passsed_chromosomes)+1):
 			t = np.random.randint(1,len(passsed_chromosomes)+1)
-			print('t =',t)
+			# print('t =',t)
 
 			if t >= 2:
 				if passsed_chromosomes[0] > passsed_chromosomes[1]:
@@ -195,22 +202,31 @@ def selection(passsed_chromosomes):
 
 				for j in range(t):
 					if (j+1)<t and passsed_chromosomes[j] > passsed_chromosomes[j+1]:
-						print('Tournament: 1)',passsed_chromosomes[j],j)
-						print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
+						# print('Tournament: 1)',passsed_chromosomes[j],j)
+						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j]
 
 					elif (j+1)<t and passsed_chromosomes[j] < passsed_chromosomes[j+1]:
-						print('Tournament: 1)',passsed_chromosomes[j],j)
-						print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
+						# print('Tournament: 1)',passsed_chromosomes[j],j)
+						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j+1]
 
 				J.append(tmp)
 
 			if t==1:
-				print('Tournament: 1)',passsed_chromosomes[i-1],i-1)
+				# print('Tournament: 1)',passsed_chromosomes[i-1],i-1)
 				J.append(passsed_chromosomes[i-1])
 				
-	return J
+	return max(J)
+
+
+def crossover_1(parent_1,parent_2,par1,par2):
+	if parent_1 is not None and parent_2 is not None:
+		random_cross_point = np.random.randint(1,days-1)
+		child = np.hstack((par1[:, 0:random_cross_point], par2[:, random_cross_point:]))
+		return child
+	else:
+		return None
 
 
 days = 14
@@ -233,10 +249,11 @@ for i in range(population_size):
 		passsed_chromosomes.append(i)
 print("Starting Generation")
 print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
-print('\nCheck matrix: ',check_matrix)
+print('\nChromosomes: ',passsed_chromosomes)
+# print('\nCheck matrix: ',check_matrix)
 
 penalty_matrix = check_fitness(pop,check_matrix,days,employees)
-print(penalty_matrix)
+# print(penalty_matrix)
 
 
 highest = np.max(penalty_matrix)
@@ -256,10 +273,31 @@ Check page 14 of the  exercise for more information
 or the report.
 """
 
-
+Pr_selection = 0.05
+Pr_crossover = 0.15
+Pr_mutation = 0.15
 for i in range(iteration):
 	print(f'\nGeneration: {i+1}')
 	new_pop = list()
 
+	for j in range(int(population_size/2)):
+		Pselection = np.random.random()
+		Pcrossover = np.random.random()
+		Pmutation = np.random.random()
 
-	# for j in range(int(population_size/2)):
+		if Pselection > Pr_selection:
+			parent_1 = selection(passsed_chromosomes)
+			parent_2 = selection(passsed_chromosomes)
+			# print('parent1',pop[parent_1])
+			# print('parent2',pop[parent_2])
+			par1 = pop[parent_1]
+			par2 = pop[parent_2]
+			while parent_1==parent_2 and len(passsed_chromosomes)>2:
+				parent_1 = selection(passsed_chromosomes)
+			if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
+				child = crossover_1(parent_1,parent_2,par1,par2)
+				# print(child,len(child))
+				new_pop.append(child)
+
+
+# print(new_pop,len(new_pop))
