@@ -180,16 +180,43 @@ def check_fitness(pop,population_size,days,employees):
 							penalty[i] += 1		#11
 	return penalty
 
-def selection():
-	"""
-	Tournament???
-	"""
+def selection(passsed_chromosomes):
+	J = list()
+	tmp = 0
+	for i in range(1,len(passsed_chromosomes)+1):
+			t = np.random.randint(1,len(passsed_chromosomes)+1)
+			print('t =',t)
+
+			if t >= 2:
+				if passsed_chromosomes[0] > passsed_chromosomes[1]:
+					tmp = passsed_chromosomes[0]
+				else:
+					tmp = passsed_chromosomes[1]
+
+				for j in range(t):
+					if (j+1)<t and passsed_chromosomes[j] > passsed_chromosomes[j+1]:
+						print('Tournament: 1)',passsed_chromosomes[j],j)
+						print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
+						tmp = passsed_chromosomes[j]
+
+					elif (j+1)<t and passsed_chromosomes[j] < passsed_chromosomes[j+1]:
+						print('Tournament: 1)',passsed_chromosomes[j],j)
+						print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
+						tmp = passsed_chromosomes[j+1]
+
+				J.append(tmp)
+
+			if t==1:
+				print('Tournament: 1)',passsed_chromosomes[i-1],i-1)
+				J.append(passsed_chromosomes[i-1])
+				
+	return J
 
 
 days = 14
 employees = 30
 population_size = 3000
-iteration = 10
+iteration = 10 #wiil see about the criteria of ending
 
 pop = create_pop(population_size,days,employees)
 check = feasibility(pop,population_size,days,employees)
@@ -204,8 +231,35 @@ for i in range(population_size):
 		print(check[i],i)
 		check_matrix.append(check[i])
 		passsed_chromosomes.append(i)
-print('\nPassed: ', len(passsed_chromosomes))
+print("Starting Generation")
+print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
 print('\nCheck matrix: ',check_matrix)
 
 penalty_matrix = check_fitness(pop,check_matrix,days,employees)
 print(penalty_matrix)
+
+
+highest = np.max(penalty_matrix)
+average = np.average(penalty_matrix)
+
+highest_matrix = list()
+highest_matrix.append(int(highest))
+average_matrix = list()
+average_matrix.append(int(average))
+# print(average_matrix)
+# print(highest_matrix)
+
+
+"""
+We implement now the basic idea of the GA
+Check page 14 of the  exercise for more information 
+or the report.
+"""
+
+
+for i in range(iteration):
+	print(f'\nGeneration: {i+1}')
+	new_pop = list()
+
+
+	# for j in range(int(population_size/2)):
