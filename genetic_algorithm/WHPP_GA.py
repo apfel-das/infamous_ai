@@ -220,13 +220,47 @@ def selection(passsed_chromosomes):
 	return max(J)
 
 
-def crossover_1(parent_1,parent_2,par1,par2):
+def crossover_1(parent_1,parent_2,par1,par2,days):
 	if parent_1 is not None and parent_2 is not None:
 		random_cross_point = np.random.randint(1,days-1)
 		child = np.hstack((par1[:, 0:random_cross_point], par2[:, random_cross_point:]))
 		return child
 	else:
 		return None
+
+# def crossover_2(parent_1,parent2,par1,par2,days):
+# 	if parent_1 is not None and parent_2 is not None:
+# 		random_cross_point = list()
+# 		points = np.random.randint(2,10) #num of crossover points
+# 		for i in range(points):
+# 			random_cross_point.append(np.random.randint(1,days-1))
+# 			random_cross_point.sort()
+# 		first = random_cross_point[0]
+# 		for i in range(points):
+# 			if i+1 < points:
+# 				child = np.hstack((par1[:,i:first],par2[:,first:random_cross_point[i+1]]))
+# 				first = random_cross_point[i+1]
+# 		return child
+# 	else:
+# 		None
+
+
+def crossover_2(parent_1,parent2,par1,par2,days):
+	if parent_1 is not None and parent_2 is not None:
+		random_cross_point = list()
+		for i in range(5):
+			random_cross_point.append(np.random.randint(1,days-1))
+			random_cross_point.sort()
+			
+		child = np.hstack((par1[:,0:random_cross_point[0]],par2[:,random_cross_point[0]:random_cross_point[1]],
+							par1[:,random_cross_point[1]:random_cross_point[2]],par2[:,random_cross_point[2]:random_cross_point[3]],
+							par1[:,random_cross_point[3]:random_cross_point[4]],par2[:,random_cross_point[4]:]))
+
+		
+		return child
+	else:
+		None
+
 
 
 days = 14
@@ -295,9 +329,11 @@ for i in range(iteration):
 			while parent_1==parent_2 and len(passsed_chromosomes)>2:
 				parent_1 = selection(passsed_chromosomes)
 			if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
-				child = crossover_1(parent_1,parent_2,par1,par2)
-				# print(child,len(child))
+				child = crossover_2(parent_1,parent_2,par1,par2,days)
+				print(child,len(child))
 				new_pop.append(child)
 
 
-# print(new_pop,len(new_pop))
+# print(new_pop)
+
+
