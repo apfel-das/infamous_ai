@@ -1,5 +1,7 @@
 import numpy as np
 import random,math
+import fileinput
+import matplotlib.pyplot as plt
 
 """
 Project_name: WHHP genetic algorithm
@@ -187,7 +189,7 @@ def check_fitness(pop,population_size,days,employees):
 							penalty[i] += 1		#11
 	return penalty
 
-def selection(passsed_chromosomes):
+def selection(passsed_chromosomes,penalty_matrix):
 	J = list()
 	tmp = 0
 	for i in range(1,len(passsed_chromosomes)+1):
@@ -195,18 +197,18 @@ def selection(passsed_chromosomes):
 			# print('t =',t)
 
 			if t >= 2:
-				if passsed_chromosomes[0] > passsed_chromosomes[1]:
+				if penalty_matrix[0] > penalty_matrix[1]:
 					tmp = passsed_chromosomes[0]
 				else:
 					tmp = passsed_chromosomes[1]
 
 				for j in range(t):
-					if (j+1)<t and passsed_chromosomes[j] > passsed_chromosomes[j+1]:
+					if (j+1)<t and penalty_matrix[j] > penalty_matrix[j+1]:
 						# print('Tournament: 1)',passsed_chromosomes[j],j)
 						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j]
 
-					elif (j+1)<t and passsed_chromosomes[j] < passsed_chromosomes[j+1]:
+					elif (j+1)<t and penalty_matrix[j] < penalty_matrix[j+1]:
 						# print('Tournament: 1)',passsed_chromosomes[j],j)
 						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j+1]
@@ -217,10 +219,15 @@ def selection(passsed_chromosomes):
 				# print('Tournament: 1)',passsed_chromosomes[i-1],i-1)
 				J.append(passsed_chromosomes[i-1])
 				
-	return max(J)
+	# print("J:",int(max(J)))
+	return int(max(J))
 
 
 def crossover_1(parent_1,parent_2,par1,par2,days):
+	"""
+	One point crossover.
+	"""
+
 	if parent_1 is not None and parent_2 is not None:
 		random_cross_point = np.random.randint(1,days-1)
 		child = np.hstack((par1[:, 0:random_cross_point], par2[:, random_cross_point:]))
@@ -228,24 +235,8 @@ def crossover_1(parent_1,parent_2,par1,par2,days):
 	else:
 		return None
 
-# def crossover_2(parent_1,parent2,par1,par2,days):
-# 	if parent_1 is not None and parent_2 is not None:
-# 		random_cross_point = list()
-# 		points = np.random.randint(2,10) #num of crossover points
-# 		for i in range(points):
-# 			random_cross_point.append(np.random.randint(1,days-1))
-# 			random_cross_point.sort()
-# 		first = random_cross_point[0]
-# 		for i in range(points):
-# 			if i+1 < points:
-# 				child = np.hstack((par1[:,i:first],par2[:,first:random_cross_point[i+1]]))
-# 				first = random_cross_point[i+1]
-# 		return child
-# 	else:
-# 		None
 
-
-def crossover_2(parent_1,parent2,par1,par2,days):
+def crossover_2(parent_1,parent_2,par1,par2,days):
 	"""
 	This is the same algorithm as above but for 
 	5 points instead of one.
@@ -271,8 +262,7 @@ def random_reseting(child):
 	0<-->3
 	1<-->2
 	"""
-	gene_index = np.random.randint(1,15)
-	# print('Gene_indx',gene_index)
+	gene_index = np.random.randint(0,14)
 	for i in range(30):
 		for j in range(14):
 			if (j==gene_index):
@@ -288,111 +278,144 @@ def random_reseting(child):
 	return child
 
 
-days = 14
-employees = 30
-population_size = 3000
-iteration = 10 #wiil see about the criteria of ending
+def swap_mutation(child):
+	"""
+	I will select a random number of genes
+	and change their enumeration:
 
-pop = create_pop(population_size,days,employees)
-check = feasibility(pop,population_size,days,employees)
-
-# Find the postion of the passing chromosomes
-# and put them on a list
-
-passsed_chromosomes = list()
-check_matrix = list()
-for i in range(population_size):
-	if check[i]==1:
-		# print(int(check[i]),i)
-		check_matrix.append(check[i])
-		passsed_chromosomes.append(i)
-print("Starting Generation")
-print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
-print('\nChromosomes: ',passsed_chromosomes)
-# print('\nCheck matrix: ',check_matrix)
-
-penalty_matrix = check_fitness(pop,check_matrix,days,employees)
-# print(penalty_matrix)
+	1,2,3,4,5,6,7,8,9 ---->  1,5,4,3,2,6,7,8,9
+	"""
+	gene_1 = np.random.randint(0,14)
+	gene_2 = np.random.randint(0,14)
+	while gene_1==gene_2:
+		gene_2 = np.random.randint(0,14)
+	for i in range(30):
+		j = 0
+		k = 0
+		while j!=gene_1:
+			j += 1
+		while k!=gene_2:
+			k += 1
+		if j==gene_1 and k==gene_2:
+			tmp = child[i][j]
+			child[i][j] = child[i][k]
+			child[i][k] = tmp
+	return child
 
 
-highest = np.max(penalty_matrix)
-average = np.average(penalty_matrix)
+for fores in range(1):
 
-highest_matrix = list()
-highest_matrix.append(int(highest))
-average_matrix = list()
-average_matrix.append(int(average))
-# print(average_matrix)
-# print(highest_matrix)
+	"""
+	We implement now the basic idea of the GA
+	Check page 14 of the  exercise for more information 
+	or the report.
+	"""
 
 
-"""
-We implement now the basic idea of the GA
-Check page 14 of the  exercise for more information 
-or the report.
-"""
-Pr_selection = 0.87
-Pr_crossover = 0.15
-Pr_mutation = 0.95
+	days = 14
+	employees = 30
+	population_size = 3000
+	ending_criteria = 5
+	best_score_progress = [] 
 
-for i in range(5):
-
-	print(f'\nGeneration: {i+1}')
-	new_pop = list()
-
-	for j in range(int(population_size/2)):
-
-		Pselection = np.random.random()
-		Pcrossover = np.random.random()
-		Pmutation = np.random.random()
-
-		if Pselection > Pr_selection:
-			parent_1 = selection(passsed_chromosomes)
-			parent_2 = selection(passsed_chromosomes)
-			# print('parent1',pop[parent_1])
-			# print('parent2',pop[parent_2])
-
-			while parent_1==parent_2 and len(passsed_chromosomes)>2:
-				parent_2 = selection(passsed_chromosomes)
-
-			par1 = pop[parent_1]
-			par2 = pop[parent_2]
-			
-			if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
-				child = crossover_1(parent_1,parent_2,par1,par2,days)
-				# print(child,len(child))
-				new_pop.append(child)
-
-			elif Pcrossover > Pr_crossover and Pmutation > Pr_mutation:
-				child = crossover_1(parent_1,parent_2,par1,par2,days)
-				mutated = random_reseting(child)
-				new_pop.append(mutated)
-
-			else:
-				if parent_1 is not None and parent_2 is not None:
-					new_pop.append(par1)
-					new_pop.append(par2)
-
-	pop = np.array(new_pop)
-	population_size = len(pop)
-	# print('population:',pop)
-	# print('popo size:' ,population_size)
-
+	pop = create_pop(population_size,days,employees)
 	check = feasibility(pop,population_size,days,employees)
-	# print('check',check)
+
+	# Find the postion of the passing chromosomes
+	# and put them on a list
+
 	passsed_chromosomes = list()
 	check_matrix = list()
-	for k in range(population_size):
-		if check[k]==1:
-			# print(int(check[i]),i)
-			check_matrix.append(check[k])
-			passsed_chromosomes.append(k)
+
+	for i in range(population_size):
+		if check[i]==1:
+			check_matrix.append(check[i])
+			passsed_chromosomes.append(i)
+
+	print("\nStarting Generation")
 	print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
-	# print('\nChromosomes: ',passsed_chromosomes)
-	penalty_matrix = check_fitness(pop,check_matrix,days,employees)
+	print("Check_matrix:",check_matrix)
+	if len(passsed_chromosomes) != 0:
 
+		penalty_matrix = check_fitness(pop,check_matrix,days,employees)
+		print("penalty_matrix",penalty_matrix)
 
+		best_score = np.max(penalty_matrix)
+		best_score_progress.append(int(best_score))
 
-# print(pop,len(pop))
+		Pr_selection = 0.9
+		Pr_crossover = 0.8
+		Pr_mutation = 0.05
 
+		for i in range(ending_criteria):
 
+			print(f'\nGeneration: {i+1}')
+			new_pop = list()
+
+			for j in range(int(population_size/2)):
+
+				Pselection = np.random.random()
+				Pcrossover = np.random.random()
+				Pmutation = np.random.random()
+
+				if Pselection > Pr_selection:
+					parent_1 = selection(passsed_chromosomes,penalty_matrix)
+					parent_2 = selection(passsed_chromosomes,penalty_matrix)
+
+					while parent_1==parent_2 and len(passsed_chromosomes)>2:
+						parent_1 = selection(passsed_chromosomes,penalty_matrix)
+
+					par1 = pop[parent_1]
+					par2 = pop[parent_2]
+
+					if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
+						child = crossover_1(parent_1,parent_2,par1,par2,days)
+						# child = crossover_2(parent_1,parent_2,par1,par2,days)
+						new_pop.append(child)
+
+					elif Pcrossover > Pr_crossover and Pmutation > Pr_mutation:
+						child = crossover_1(parent_1,parent_2,par1,par2,days)
+						# child = crossover_2(parent_1,parent_2,par1,par2,days)
+						mutated = random_reseting(child)
+						# mutated = swap_mutation(child)
+						new_pop.append(mutated)
+
+					else:
+						if parent_1 is not None and parent_2 is not None:
+							new_pop.append(par1)
+							new_pop.append(par2)
+					
+
+			pop = np.array(new_pop)
+			population_size = len(pop)
+			check = feasibility(pop,population_size,days,employees)
+
+			passsed_chromosomes = list()
+			check_matrix = list()
+			for k in range(population_size):
+				if check[k]==1:
+					check_matrix.append(check[k])
+					passsed_chromosomes.append(k)
+			print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
+			penalty_matrix = check_fitness(pop,check_matrix,days,employees)
+
+			if len(penalty_matrix) != 0:
+				best_score = np.max(penalty_matrix)
+				best_score_progress.append(int(best_score))	
+
+	else:
+		print(f"Initial Number of Passed Chromosomes: {len(passsed_chromosomes)}")
+		print("\nStart over.")
+
+for i in range(1, len(best_score_progress)):
+    print(f'\n=== Generation: {i} ====\n' )
+    print(f'\nBest score: {best_score_progress[i]}')
+    print('\n')
+
+# Plot progress - Best Score
+plt.figure()
+plt.plot(best_score_progress)
+plt.xlabel('Generation')
+plt.ylabel('Best score')
+plt.title('Best Score Progress')
+plt.show()
