@@ -44,12 +44,15 @@ def feasibility(pop,population_size,days,employees):
 	"""
 	hcons = np.zeros((3,14)) #3 shifts, 2 weeks(14days)
 	for i in range(3):
+		
 		for j in range(14):
+			
 			if (i==0 and j==0) or (i==1 and j==0) or (i==0 and j==1) or \
 				(i==1 and j==1) or (i==1 and j==2) or (i==1 and j==4) \
 				or (i==0 and j==7) or (i==1 and j==7) or (i==0 and j==8) or \
 				(i==1 and j==8) or (i==1 and j==9) or (i==0 and j==11):
 				hcons[i][j] = 10
+			
 			else:
 				hcons[i][j] = 5
 
@@ -61,21 +64,29 @@ def feasibility(pop,population_size,days,employees):
 
 	#Num of employee shifts per day
 	for i in range(population_size):
+		
 		for j in range(days):
+			
 			for k in range(employees):
+				
 				if pop[i,k,j]==1:
 					mshift += 1
+				
 				elif pop[i,k,j]==2:
 					ashift += 1
+				
 				elif pop[i,k,j]==3:
 					nshift += 1
+			
 			if hcons[0,j]==mshift and hcons[1,j]==ashift and hcons[2,j]==nshift:
 				feas_check[i] = 1
+			
 			else:
 				mshift = 0
 				ashift = 0
 				nshift = 0
 				break
+
 	return feas_check
 
 
@@ -100,14 +111,20 @@ def check_fitness(pop,population_size,days,employees):
 	d_days_off = 0
 
 	for i in range(len(population_size)):
+		
 		penalty[i] = 0
+		
 		for j in range(employees):
+			
 			if hours >= 70: 			#1
 				penalty[i] += 1000
+			
 			if n_days_off < 2: 			#7
 				penalty[i] += 100
+			
 			if d_days_off < 2:			#8
 				penalty[i] += 100
+			
 			hours = 0
 			cons_d = 0
 			cons_n = 0
@@ -119,35 +136,44 @@ def check_fitness(pop,population_size,days,employees):
 			a_flag = 0
 			n_flag = 0
 			day_off_flag = 0
+			
 			for k in range(days):
+				
 				#morning shift restrictions
 				if pop[i,j,k] == 1:
 					hours += 8
 					cons_d += 1
 					cons_n = 0
+					
 					if n_flag == 1:
 						penalty[i] += 1000 #4
 						n_flag = 0
+					
 					if a_flag ==1:
 						penalty[i] += 800	#5
 						a_flag = 0
+					
 					workdays += 1
 					if (cons_d ==1 and day_off_flag == 1):
 						penalty[i] += 1		#9
 						day_off_flag = 0
+				
 				#afternoon shift restrictions
 				elif pop[i,j,k] == 2:
 					hours += 8
 					cons_d += 1
 					cons_n = 0
+					
 					if n_flag == 1:
 						penalty[i] += 800	#6
 						n_flag = 0
+					
 					a_flag = 1
 					workdays += 1
 					if cons_d ==1 and day_off_flag == 1:
 						penalty[i] += 1 #9
 						day_off_flag = 0
+				
 				#night shift restrictions
 				elif pop[i,j,k] == 3:
 					hours += 10
@@ -156,45 +182,59 @@ def check_fitness(pop,population_size,days,employees):
 					night_flag = 1
 					nights += 1
 					workdays += 1
+					
 					if cons_d == 1 and day_off_flag == 1:
 						penalty[i] += 1		#10
 						day_off_flag = 0
+				
 				#day off
 				else:
+					
 					if n_flag == 1:
 						n_flag = 0
+					
 					if a_flag == 1:
 						a_flag = 0
+					
 					if nights >= 4:
 						n_days_off += 1
+					
 					if workdays >= 7:
 						d_days_off += 1
+					
 					if cons_d == 1:
+						
 						if day_off_flag == 0:
 							penalty[i] += 1 	#9
 						cons_d = 0
 						day_off_flag = 0
+					
 					else:
 						cons_d = 0
+				
 				if cons_d > 7:
 					penalty[i] += 1000			#2
 					cons_d = 0
 					cons_n = 0
+				
 				if cons_n > 4:
 					penalty[i] += 1000			#3
 					cons_n = 0
+				
 				if k == 13:
+					
 					if pop[i,j,k] != 0 and pop[i,j,k-1] != 0:
+						
 						if pop[i,j,k-7] != 0 and pop[i,j,k-8] != 0:
 							penalty[i] += 1		#11
 	return penalty
 
-def selection(passsed_chromosomes,penalty_matrix):
+def selection_2(passsed_chromosomes,penalty_matrix):
+	
 	J = list()
 	tmp = 0
 	for i in range(1,len(passsed_chromosomes)+1):
 			t = np.random.randint(1,len(passsed_chromosomes)+1)
-			# print('t =',t)
 
 			if t >= 2:
 				if penalty_matrix[0] > penalty_matrix[1]:
@@ -204,22 +244,49 @@ def selection(passsed_chromosomes,penalty_matrix):
 
 				for j in range(t):
 					if (j+1)<t and penalty_matrix[j] > penalty_matrix[j+1]:
-						# print('Tournament: 1)',passsed_chromosomes[j],j)
-						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j]
 
 					elif (j+1)<t and penalty_matrix[j] < penalty_matrix[j+1]:
-						# print('Tournament: 1)',passsed_chromosomes[j],j)
-						# print('Tournament: 2)',passsed_chromosomes[j+1],(j+1))
 						tmp = passsed_chromosomes[j+1]
 
 				J.append(tmp)
 
 			if t==1:
-				# print('Tournament: 1)',passsed_chromosomes[i-1],i-1)
 				J.append(passsed_chromosomes[i-1])
 				
-	# print("J:",int(max(J)))
+	return int(max(J))
+	
+
+def selection(passsed_chromosomes,penalty_matrix):
+	
+	index = []
+	J = []
+	tmp = 0
+	rand_idx = np.random.randint(1,len(passsed_chromosomes)+1)
+	participants = []
+
+	if rand_idx>=2:
+
+		for i in range(rand_idx):
+			
+			index.append(np.random.randint(1,len(passsed_chromosomes)))
+
+		for j in range(len(index)):
+
+			if j+1<len(index) and penalty_matrix[index[j]] > penalty_matrix[index[j+1]]:
+				tmp = passsed_chromosomes[j]
+			
+			elif j+1<len(index) and penalty_matrix[index[j]] < penalty_matrix[index[j+1]]:
+				tmp = passsed_chromosomes[j+1]
+			
+			else:
+				tmp = passsed_chromosomes[j]
+		
+		J.append(tmp)
+	
+	if rand_idx==1:
+		J.append(passsed_chromosomes[0])
+	
 	return int(max(J))
 
 
@@ -232,6 +299,7 @@ def crossover_1(parent_1,parent_2,par1,par2,days):
 		random_cross_point = np.random.randint(1,days-1)
 		child = np.hstack((par1[:, 0:random_cross_point], par2[:, random_cross_point:]))
 		return child
+	
 	else:
 		return None
 
@@ -244,6 +312,7 @@ def crossover_2(parent_1,parent_2,par1,par2,days):
 
 	if parent_1 is not None and parent_2 is not None:
 		random_cross_point = list()
+		
 		for i in range(5):
 			random_cross_point.append(np.random.randint(1,days-1))
 			random_cross_point.sort()
@@ -252,6 +321,7 @@ def crossover_2(parent_1,parent_2,par1,par2,days):
 							par1[:,random_cross_point[1]:random_cross_point[2]],par2[:,random_cross_point[2]:random_cross_point[3]],
 							par1[:,random_cross_point[3]:random_cross_point[4]],par2[:,random_cross_point[4]:]))		
 		return child
+	
 	else:
 		None
 
@@ -263,15 +333,22 @@ def random_reseting(child):
 	1<-->2
 	"""
 	gene_index = np.random.randint(0,14)
+	
 	for i in range(30):
+		
 		for j in range(14):
+			
 			if (j==gene_index):
+				
 				if child[i][j]==0:
 					child[i][j] = 3
+				
 				elif child[i][j]==1:
 					child[i][j] = 2
+				
 				elif child[i][j]==2:
 					child[i][j] = 1
+				
 				elif child[i][j]==3:
 					child[i][j] = 0
 
@@ -287,19 +364,25 @@ def swap_mutation(child):
 	"""
 	gene_1 = np.random.randint(0,14)
 	gene_2 = np.random.randint(0,14)
+
 	while gene_1==gene_2:
 		gene_2 = np.random.randint(0,14)
+	
 	for i in range(30):
 		j = 0
 		k = 0
+		
 		while j!=gene_1:
 			j += 1
+		
 		while k!=gene_2:
 			k += 1
+		
 		if j==gene_1 and k==gene_2:
 			tmp = child[i][j]
 			child[i][j] = child[i][k]
 			child[i][k] = tmp
+	
 	return child
 
 
@@ -315,8 +398,9 @@ for fores in range(1):
 	days = 14
 	employees = 30
 	population_size = 3000
-	ending_criteria = 5
-	best_score_progress = [] 
+	ending_criteria = 10
+	best_score_chr = list() 
+	avg_score_chr = list()
 
 	pop = create_pop(population_size,days,employees)
 	check = feasibility(pop,population_size,days,employees)
@@ -328,23 +412,25 @@ for fores in range(1):
 	check_matrix = list()
 
 	for i in range(population_size):
+		
 		if check[i]==1:
 			check_matrix.append(check[i])
 			passsed_chromosomes.append(i)
 
 	print("\nStarting Generation")
 	print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
-	print("Check_matrix:",check_matrix)
+	
 	if len(passsed_chromosomes) != 0:
-
 		penalty_matrix = check_fitness(pop,check_matrix,days,employees)
-		print("penalty_matrix",penalty_matrix)
-
+		
 		best_score = np.max(penalty_matrix)
-		best_score_progress.append(int(best_score))
+		best_score_chr.append(int(best_score))
 
-		Pr_selection = 0.9
-		Pr_crossover = 0.8
+		avg_score = np.average(penalty_matrix)
+		avg_score_chr.append(int(avg_score))
+
+		Pr_selection = 0.8
+		Pr_crossover = 0.85
 		Pr_mutation = 0.05
 
 		for i in range(ending_criteria):
@@ -369,18 +455,23 @@ for fores in range(1):
 					par2 = pop[parent_2]
 
 					if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
-						child = crossover_1(parent_1,parent_2,par1,par2,days)
-						# child = crossover_2(parent_1,parent_2,par1,par2,days)
-						new_pop.append(child)
+						
+						if parent_1 is not None and parent_2 is not None:
+							child = crossover_1(parent_1,parent_2,par1,par2,days)
+							# child = crossover_2(parent_1,parent_2,par1,par2,days)
+							new_pop.append(child)
 
 					elif Pcrossover > Pr_crossover and Pmutation > Pr_mutation:
-						child = crossover_1(parent_1,parent_2,par1,par2,days)
-						# child = crossover_2(parent_1,parent_2,par1,par2,days)
-						mutated = random_reseting(child)
-						# mutated = swap_mutation(child)
-						new_pop.append(mutated)
+						
+						if parent_1 is not None and parent_2 is not None:
+							child = crossover_1(parent_1,parent_2,par1,par2,days)
+							# child = crossover_2(parent_1,parent_2,par1,par2,days)
+							mutated = random_reseting(child)
+							# mutated = swap_mutation(child)
+							new_pop.append(mutated)
 
 					else:
+						
 						if parent_1 is not None and parent_2 is not None:
 							new_pop.append(par1)
 							new_pop.append(par2)
@@ -392,7 +483,9 @@ for fores in range(1):
 
 			passsed_chromosomes = list()
 			check_matrix = list()
+
 			for k in range(population_size):
+				
 				if check[k]==1:
 					check_matrix.append(check[k])
 					passsed_chromosomes.append(k)
@@ -401,21 +494,31 @@ for fores in range(1):
 
 			if len(penalty_matrix) != 0:
 				best_score = np.max(penalty_matrix)
-				best_score_progress.append(int(best_score))	
+				best_score_chr.append(int(best_score))
+				avg_score = np.average(penalty_matrix)
+				avg_score_chr.append(int(avg_score))	
 
 	else:
 		print(f"Initial Number of Passed Chromosomes: {len(passsed_chromosomes)}")
 		print("\nStart over.")
 
-for i in range(1, len(best_score_progress)):
-    print(f'\n=== Generation: {i} ====\n' )
-    print(f'\nBest score: {best_score_progress[i]}')
+for i in range(1, len(best_score_chr)):
+    print(f'\n===== Generation: {i} ====================\n' )
+    print(f'\n===== Score of best chromosome: {best_score_chr[i]}')
+    print(f'\n===== Average score: {avg_score_chr[i]}')
     print('\n')
 
 # Plot progress - Best Score
-plt.figure()
-plt.plot(best_score_progress)
+plt.figure(num=1)
+plt.plot(best_score_chr)
 plt.xlabel('Generation')
 plt.ylabel('Best score')
-plt.title('Best Score Progress')
+plt.title('Best Score through Genertions')
+plt.show()
+
+plt.figure(num=2)
+plt.plot(avg_score_chr)
+plt.xlabel('Generation')
+plt.ylabel('Average Score')
+plt.title('Average Score through Generations')
 plt.show()
