@@ -1,3 +1,8 @@
+"""
+The main documentation is in the report section
+"""
+
+
 import numpy as np
 import random,math
 import fileinput
@@ -357,10 +362,10 @@ def random_reseting(child):
 
 def swap_mutation(child):
 	"""
-	I will select a random number of genes
-	and change their enumeration:
+	I will select two random genes
+	and change their values with eaxh other:
 
-	1,2,3,4,5,6,7,8,9 ---->  1,5,4,3,2,6,7,8,9
+	1,2,3,4,5,6,7,8,9 ---->  1,2,6,4,5,3,7,8,9
 	"""
 	gene_1 = np.random.randint(0,14)
 	gene_2 = np.random.randint(0,14)
@@ -389,23 +394,23 @@ def swap_mutation(child):
 for fores in range(1):
 
 	"""
-	We implement now the basic idea of the GA
-	Check page 14 of the  exercise for more information 
-	or the report.
+	We implement the main part of the program.
+	Since python does not need a main function 
+	it is implemented as a script.
 	"""
 
 
 	days = 14
 	employees = 30
 	population_size = 3000
-	ending_criteria = 10
-	best_score_chr = list() 
+	ending_criteria = 500
+	penalty_score_chr = list() 
 	avg_score_chr = list()
 
 	pop = create_pop(population_size,days,employees)
 	check = feasibility(pop,population_size,days,employees)
 
-	# Find the postion of the passing chromosomes
+	# Find the postion and the number of the passing chromosomes
 	# and put them on a list
 
 	passsed_chromosomes = list()
@@ -420,25 +425,27 @@ for fores in range(1):
 	print("\nStarting Generation")
 	print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
 	
+
+	#metrics
+	
 	if len(passsed_chromosomes) != 0:
 		penalty_matrix = check_fitness(pop,check_matrix,days,employees)
 		
-		best_score = np.max(penalty_matrix)
-		best_score_chr.append(int(best_score))
+		max_penalty = np.max(penalty_matrix)
+		penalty_score_chr.append(int(max_penalty))
 
 		avg_score = np.average(penalty_matrix)
 		avg_score_chr.append(int(avg_score))
 
-		Pr_selection = 0.8
-		Pr_crossover = 0.85
-		Pr_mutation = 0.05
-
+		Pr_selection = 0.15
+		Pr_crossover = 0.15
+		Pr_mutation = 0.95
 		for i in range(ending_criteria):
 
 			print(f'\nGeneration: {i+1}')
 			new_pop = list()
 
-			for j in range(int(population_size/2)):
+			for j in range(int(population_size)):
 
 				Pselection = np.random.random()
 				Pcrossover = np.random.random()
@@ -479,6 +486,7 @@ for fores in range(1):
 
 			pop = np.array(new_pop)
 			population_size = len(pop)
+			
 			check = feasibility(pop,population_size,days,employees)
 
 			passsed_chromosomes = list()
@@ -489,36 +497,42 @@ for fores in range(1):
 				if check[k]==1:
 					check_matrix.append(check[k])
 					passsed_chromosomes.append(k)
+
 			print('\nNumber of passed chromosomes: ', len(passsed_chromosomes))
 			penalty_matrix = check_fitness(pop,check_matrix,days,employees)
 
 			if len(penalty_matrix) != 0:
-				best_score = np.max(penalty_matrix)
-				best_score_chr.append(int(best_score))
+				max_penalty = np.max(penalty_matrix)
+				penalty_score_chr.append(int(max_penalty))
 				avg_score = np.average(penalty_matrix)
-				avg_score_chr.append(int(avg_score))	
+				avg_score_chr.append(int(avg_score))
 
 	else:
 		print(f"Initial Number of Passed Chromosomes: {len(passsed_chromosomes)}")
 		print("\nStart over.")
 
-for i in range(1, len(best_score_chr)):
-    print(f'\n===== Generation: {i} ====================\n' )
-    print(f'\n===== Score of best chromosome: {best_score_chr[i]}')
-    print(f'\n===== Average score: {avg_score_chr[i]}')
-    print('\n')
+	for i in range(1, len(penalty_score_chr)):
+	    print(f'\n Generation: {i}\n' )
+	    print(f'\n Penalty of the best chromosome: {penalty_score_chr[i]}')
+	    print(f'\n Average score: {avg_score_chr[i]}')
+	    print('\n')
 
-# Plot progress - Best Score
-plt.figure(num=1)
-plt.plot(best_score_chr)
-plt.xlabel('Generation')
-plt.ylabel('Best score')
-plt.title('Best Score through Genertions')
-plt.show()
+	#plot best penalty of each chromosome and avg.
+	#print the probabilities
+	print(f'Pcrossover={1-Pr_crossover}')
+	print(f'Pselection={1-Pr_selection}')
+	print(f'Pmutation={1-Pr_mutation}')
 
-plt.figure(num=2)
-plt.plot(avg_score_chr)
-plt.xlabel('Generation')
-plt.ylabel('Average Score')
-plt.title('Average Score through Generations')
-plt.show()
+
+	plt.figure(num=1)
+	plt.plot(penalty_score_chr)
+	plt.xlabel('Generation')
+	plt.ylabel('Best score')
+	plt.title('Best Score per Genertions')
+	plt.show()
+
+	plt.plot(avg_score_chr)
+	plt.xlabel('Generation')
+	plt.ylabel('Average Score')
+	plt.title('Average Score per Generations')
+	plt.show()
