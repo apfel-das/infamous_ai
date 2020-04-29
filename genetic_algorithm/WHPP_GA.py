@@ -234,33 +234,6 @@ def check_fitness(pop,population_size,days,employees):
 							penalty[i] += 1		#11
 	return penalty
 
-def selection_2(passsed_chromosomes,penalty_matrix):
-	
-	J = list()
-	tmp = 0
-	for i in range(1,len(passsed_chromosomes)+1):
-			t = np.random.randint(1,len(passsed_chromosomes)+1)
-
-			if t >= 2:
-				if penalty_matrix[0] > penalty_matrix[1]:
-					tmp = passsed_chromosomes[0]
-				else:
-					tmp = passsed_chromosomes[1]
-
-				for j in range(t):
-					if (j+1)<t and penalty_matrix[j] > penalty_matrix[j+1]:
-						tmp = passsed_chromosomes[j]
-
-					elif (j+1)<t and penalty_matrix[j] < penalty_matrix[j+1]:
-						tmp = passsed_chromosomes[j+1]
-
-				J.append(tmp)
-
-			if t==1:
-				J.append(passsed_chromosomes[i-1])
-				
-	return int(max(J))
-	
 
 def selection(passsed_chromosomes,penalty_matrix):
 	
@@ -437,9 +410,9 @@ for fores in range(1):
 		avg_score = np.average(penalty_matrix)
 		avg_score_chr.append(int(avg_score))
 
-		Pr_selection = 0.15
-		Pr_crossover = 0.15
-		Pr_mutation = 0.95
+		Pr_selection = 0.15 # this means 1-Pr_selection=0.85
+		Pr_crossover = 0.15 # 0.85
+		Pr_mutation = 0.95 # 0.05
 		for i in range(ending_criteria):
 
 			print(f'\nGeneration: {i+1}')
@@ -464,17 +437,17 @@ for fores in range(1):
 					if Pcrossover > Pr_crossover and Pmutation < Pr_mutation:
 						
 						if parent_1 is not None and parent_2 is not None:
-							child = crossover_1(parent_1,parent_2,par1,par2,days)
-							# child = crossover_2(parent_1,parent_2,par1,par2,days)
+							# child = crossover_1(parent_1,parent_2,par1,par2,days)
+							child = crossover_2(parent_1,parent_2,par1,par2,days)
 							new_pop.append(child)
 
 					elif Pcrossover > Pr_crossover and Pmutation > Pr_mutation:
 						
 						if parent_1 is not None and parent_2 is not None:
-							child = crossover_1(parent_1,parent_2,par1,par2,days)
-							# child = crossover_2(parent_1,parent_2,par1,par2,days)
-							mutated = random_reseting(child)
-							# mutated = swap_mutation(child)
+							# child = crossover_1(parent_1,parent_2,par1,par2,days)
+							child = crossover_2(parent_1,parent_2,par1,par2,days)
+							# mutated = random_reseting(child)
+							mutated = swap_mutation(child)
 							new_pop.append(mutated)
 
 					else:
