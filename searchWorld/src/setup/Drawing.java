@@ -23,7 +23,7 @@ public class Drawing extends Canvas{
 	public static int M = 9;
 	public static int [] walls;
 	public static int [] grass;
-	public static int [] step_sequence=null;
+	public int [] step_sequence=null;
 	public static int start_idx,terminal_idx;
 	public static int s =30;
 

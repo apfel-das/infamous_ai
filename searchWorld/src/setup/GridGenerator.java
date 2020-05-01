@@ -10,21 +10,15 @@ package setup;
 */
 
 
-import java.util.Random;
 import java.util.Scanner;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.swing.*;
 
 
 import searchOps.AStar;
+import searchOps.LRTAStar;
 import searchOps.searchBFS;
 import searchOps.searchDFS;
 
-import java.awt.Graphics;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.Canvas; 
@@ -33,6 +27,7 @@ class GridGenerator{
 
 	public static void main(String[] args) throws InterruptedException {
 		
+		@SuppressWarnings("unused")
 		String frame = "Random World";
 		Grid mygrid;
 		if (args.length<1)
@@ -91,7 +86,7 @@ class GridGenerator{
 					
 					searchBFS bfs =  new searchBFS();
 					Node goal = bfs.solve(mygrid, N, M);
-					ArrayList<Node> path = bfs.backtrack(goal);
+					ArrayList<Node> path = bfs.backtrack(goal, gCost,mygrid);
 					
 					if(goal != null) 
 					{
@@ -108,7 +103,7 @@ class GridGenerator{
 							if(c == 't') 
 								printPath(path);
 							else if(c == 'v')
-								VisualizeGrid("BFS Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(path,M),mygrid.getStartidx(),mygrid.getTerminalidx());
+								VisualizeGrid("BFS Solution"+"["+"Grass Cost"+gCost+"]",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(path,M),mygrid.getStartidx(),mygrid.getTerminalidx());
 							else
 								break;
 							
@@ -139,12 +134,12 @@ class GridGenerator{
 					
 					searchDFS dfs =  new searchDFS();
 					Node goalDFS = dfs.solve(mygrid, N, M);
-					ArrayList<Node> pathDFS = dfs.backtrack(goalDFS);
+					ArrayList<Node> pathDFS = dfs.backtrack(goalDFS, gCost, mygrid);
 					
 					if(goalDFS != null) 
 					{
 						
-						System.out.println("Path found [via BFS]. Print solution? [Y/n] ");
+						System.out.println("Path found [via DFS]. Print solution? [Y/n] ");
 						char c = in.next().charAt(0);
 					
 						if(c == 'y')
@@ -155,7 +150,7 @@ class GridGenerator{
 							if(c == 't') 
 								printPath(pathDFS);
 							else if(c == 'v')
-								VisualizeGrid("DFS Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(pathDFS,M),mygrid.getStartidx(),mygrid.getTerminalidx());
+								VisualizeGrid("DFS Solution"+"["+"Grass Cost"+gCost+"]"+gCost,N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(pathDFS,M),mygrid.getStartidx(),mygrid.getTerminalidx());
 							else
 								break;
 							
@@ -189,7 +184,7 @@ class GridGenerator{
 					
 					AStar aStar =  new AStar(gCost);
 					Node goalStar = aStar.solve(mygrid, N, M);
-					ArrayList<Node> pathStar = aStar.backtrack(goalStar);
+					ArrayList<Node> pathStar = aStar.backtrack(goalStar, gCost, mygrid);
 					
 					if(goalStar != null) 
 					{
@@ -205,13 +200,58 @@ class GridGenerator{
 							if(c == 't') 
 								printPath(pathStar);
 							else if(c == 'v')
-								VisualizeGrid("A* Solution",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(pathStar,M),mygrid.getStartidx(),mygrid.getTerminalidx());
+								VisualizeGrid("A* Solution"+"["+"Grass Cost"+gCost+"]",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(pathStar,M),mygrid.getStartidx(),mygrid.getTerminalidx());
 							else
 								break;
 							
 						}
 				
 						
+					}
+					else 
+					{
+						//No solution was found.
+						System.out.println("No solution found.");
+					}
+					
+					in.nextLine();
+					
+					
+					break;
+				case "l":
+					
+					
+					// initalize grass cost.
+					while(gCost != 2 && gCost != 10)
+					{
+						System.out.println("Choose your preferable Grass Cost [2/10]");
+						gCost = Integer.parseInt(in.nextLine().trim());
+						System.out.println(gCost);
+						
+					}
+					
+					
+					LRTAStar lrtaStar =  new LRTAStar(mygrid,1,gCost);
+					ArrayList<Node> lrtaPath = lrtaStar.solve();
+					lrtaStar.printMetrics(lrtaPath, gCost, mygrid);
+					if(lrtaPath != null) 
+					{
+						System.out.println("Path found [via LRTA*]. Print solution? [Y/n] ");
+						char c = in.next().charAt(0);
+					
+						if(c == 'y')
+						{
+							
+							System.out.println("Tuples or Visual? [t/v]");
+							c = in.next().charAt(0);
+							if(c == 't') 
+								printPath(lrtaPath);
+							else if(c == 'v')
+								VisualizeGrid("LRTA* Solution"+"["+"Grass Cost"+gCost+"]",N,M,mygrid.getWalls(),mygrid.getGrass(),makePrintable(lrtaPath,M),mygrid.getStartidx(),mygrid.getTerminalidx());
+							else
+								break;
+							
+						}
 						
 					}
 					else 
@@ -228,20 +268,12 @@ class GridGenerator{
 					System.out.println("Bad Command");
 				
 			}
-			
-		
-			
-			
-		
+	
 			
 		}while(ch.compareTo("q") != 0);
 		
 		
-		
-		
-		
-		
-		
+		in.close();
 		
 	}
 	
@@ -255,6 +287,7 @@ class GridGenerator{
 		System.out.println("\"b\" - Solve the given maze with BFS.");
 		System.out.println("\"d\" - Solve the given maze with DFS.");
 		System.out.println("\"a\" - Solve the given maze with A*.");
+		System.out.println("\"l\" - Solve the given maze with LRTA*.");
 		
 	}
 	

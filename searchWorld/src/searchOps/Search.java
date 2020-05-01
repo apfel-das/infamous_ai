@@ -89,8 +89,9 @@ public abstract class Search {
 		 * @param target
 		 * @return path- ArrayList of Nodes.
 		 */
-		public ArrayList<Node> backtrack(Node target)
+		public ArrayList<Node> backtrack(Node target, int gCost, Grid mygrid)
 		{
+			
 			// Get a terminal Node, construct a solution.
 			ArrayList<Node> path = new ArrayList<Node>();
 			
@@ -99,6 +100,9 @@ public abstract class Search {
 			//iterate parent-wise. 
 			while(target != null) 
 			{
+				
+					
+					
 				//add to path, the move to it's predecessor.
 				path.add(target);
 				target = target.getParent();
@@ -110,9 +114,33 @@ public abstract class Search {
 			//reverse the path in a Root->..-> Terminal order. THIS MIGHT BE non-compatible with versions < Java8.
 			Collections.reverse(path);
 			
-		
+			// Inform about the cost of each given path.
+			printMetrics(path, gCost, mygrid);
 			
 			return path;
+			
+		}
+		
+		public void printMetrics(ArrayList<Node> path, int gCost, Grid mygrid) 
+		{
+			int fCost = 0;
+			int grass = 0;
+			int land  = 0;
+			
+			for(Node curr : path) 
+			{
+				//add things up.
+				fCost += mygrid.getCell(curr.getRow(), curr.getCol()).isLand() ? 1 : gCost;
+				
+				if(mygrid.getCell(curr.getRow(), curr.getCol()).isLand())
+					land++;
+				else
+					grass++;
+				
+			}
+			System.out.println("----------------------------------INFO:-----------------------------------------------");
+			System.out.println("\nCurrent path has: "+grass+" Grass nodes "+land+" Land Nodes. Traverse Penalty: "+fCost+" [Grass Cost = "+gCost+"]");
+			
 			
 		}
 }
