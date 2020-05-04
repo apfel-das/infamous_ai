@@ -14,7 +14,7 @@ import setup.Node;
 
 public class AStar extends Search {
 
-	private final int MOVE_COST;
+	protected final int MOVE_COST;
 	
 	public AStar(int mCost) 
 	{
@@ -58,6 +58,7 @@ public class AStar extends Search {
 		//traverse
 		while(!queue.isEmpty()) 
 		{
+			
 			// the current Node.
 			Node curr = queue.poll().getNode();
 			
@@ -104,7 +105,7 @@ public class AStar extends Search {
 
 	    Node node;
 	    double totalDistance; //f = g + h.
-	    double predictedDistance; //heuristics
+	    double predictedDistance; //heuristics - h
 
 	    public Pair(Node n, double totalDistance, double predictedDistance) {
 	        this.node = n;
@@ -114,9 +115,9 @@ public class AStar extends Search {
 
 	    @Override
 	    public int compareTo(Object o) {
-	        if (this.predictedDistance > ((Pair) o).predictedDistance) {
+	        if (this.totalDistance > ((Pair) o).totalDistance) {
 	            return 1;
-	        } else if (this.predictedDistance < ((Pair) o).predictedDistance) {
+	        } else if (this.totalDistance < ((Pair) o).totalDistance) {
 	            return -1;
 	        } else {
 	            return 0;
@@ -128,10 +129,12 @@ public class AStar extends Search {
 	    }
 	}
 	
-	 private double calcDistance(Node a, Node b) {
+	 protected double calcDistance(Node a, Node b) {
 	        return Math.sqrt(Math.pow(a.getRow() - b.getRow(), 2) + Math.pow(a.getCol() - b.getCol(), 2));
 	    }
 	
+	 
+	 
 	
 }
 
