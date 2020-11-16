@@ -109,7 +109,7 @@ int sendMsg( int msg, int mySocket )
 
 	if( send( mySocket, &msgCode, 1, 0 ) != 1 )
 	{
-		printf( "ERROR: Network problem\n" );
+		printf( "ERROR: Network problem\n",msgCode );
 		return -1;
 	}
 
@@ -124,7 +124,7 @@ int recvMsg( int socket )
 
 	if( recv( socket, &msg, 1, 0 ) != 1 )
 	{
-		printf( "ERROR: Network problem\n" );
+		printf( "ERROR: Network problem\n",msg );
 		exit( 1 );
 	}
 

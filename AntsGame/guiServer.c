@@ -40,7 +40,7 @@ char tempMessage[ 300 ];
 int sendMsgGS( int msg, int mySocket )
 {
 	int value;
-
+	
 	value = sendMsg( msg, mySocket );
 
 	if( value < 0 && ( msg != NM_QUIT ) )
@@ -53,7 +53,7 @@ int sendMsgGS( int msg, int mySocket )
 
 		return -1;
 	}
-
+	
 	return 0;
 
 }
@@ -101,7 +101,7 @@ int getMoveGS( Move * moveToGet, int mySocket )
 
 		return -1;
 	}
-
+	
 	return 0;
 
 }
@@ -365,7 +365,6 @@ void playRandom( void )
 	doMove( &gamePosition, &tempMove );
 	printPosition( &gamePosition );
 	printToGui();
-	//sleep(1);
 	checkVictoryAndSendMove();
 
 }
@@ -419,12 +418,12 @@ void checkVictoryAndSendMove( void )
 
 		if( whitePlayerValue > 1)
 		{
-			if( sendMsgGS( NM_PREPARE_TO_RECEIVE_MOVE, externalPlayers[ whitePlayerValue ].playerSocket ) < 0 )
+			
+			
+			if( sendMsgGS( NM_NEW_POSITION, externalPlayers[ whitePlayerValue ].playerSocket ) < 0 )
 				return;
-
-			if( sendMoveGS( &tempMove, externalPlayers[ whitePlayerValue ].playerSocket ) < 0 )
+			if( sendPositionGS( &gamePosition, externalPlayers[ whitePlayerValue ].playerSocket ) < 0 )
 				return;
-
 			if( stopFlag == 0 )
 				if( sendMsgGS( NM_REQUEST_MOVE, externalPlayers[ whitePlayerValue ].playerSocket ) < 0 )
 					return;
@@ -442,12 +441,12 @@ void checkVictoryAndSendMove( void )
 	{
 		if( blackPlayerValue > 1)
 		{
-			if( sendMsgGS( NM_PREPARE_TO_RECEIVE_MOVE, externalPlayers[ blackPlayerValue ].playerSocket ) < 0 )
+			
+		
+			if( sendMsgGS( NM_NEW_POSITION, externalPlayers[ blackPlayerValue ].playerSocket ) < 0 )
 				return;
-
-			if( sendMoveGS( &tempMove, externalPlayers[ blackPlayerValue ].playerSocket ) < 0 )
+			if( sendPositionGS( &gamePosition, externalPlayers[ blackPlayerValue ].playerSocket ) < 0 )
 				return;
-
 			if( stopFlag == 0 )
 				if( sendMsgGS( NM_REQUEST_MOVE, externalPlayers[ blackPlayerValue ].playerSocket ) < 0 )
 					return;
@@ -1212,7 +1211,7 @@ int main( int argc, char *argv[] )
 	window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	gtk_window_set_position( GTK_WINDOW( window ), GTK_WIN_POS_CENTER );
 	gtk_window_set_default_size( GTK_WINDOW( window ), 600, 400 );
-	gtk_window_set_title( GTK_WINDOW( window ), "TUC Ants v1.0" );
+	gtk_window_set_title( GTK_WINDOW( window ), "TUC Ants v1.01" );
 	gtk_window_set_resizable( GTK_WINDOW( window ), FALSE );
 	gtk_window_set_icon( GTK_WINDOW( window ), create_pixbuf( "images/ta.ico" ) );
 

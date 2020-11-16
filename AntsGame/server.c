@@ -132,6 +132,11 @@ int main( int argc, char **argv )
 			//we have a legal move
 			doMove( &gamePosition, &tempMove );
 			printPosition( &gamePosition );
+			sendMsg( NM_NEW_POSITION, playerOne.playerSocket );
+			sendPosition( &gamePosition, playerOne.playerSocket );
+
+			sendMsg( NM_NEW_POSITION, playerTwo.playerSocket );
+			sendPosition( &gamePosition, playerTwo.playerSocket );
 
 			if( !canMove( &gamePosition, WHITE ) && !canMove( &gamePosition, BLACK ) )	//if none can move..game ended
 			{
@@ -169,11 +174,9 @@ int main( int argc, char **argv )
 			}
 
 
-			//send move to the other player
-			sendMsg( NM_PREPARE_TO_RECEIVE_MOVE, waitingPlayer->playerSocket );
-			sendMove( &tempMove, waitingPlayer->playerSocket );
-			//getchar();
-			//sleep(1);
+		
+			
+		
 
 
 		}

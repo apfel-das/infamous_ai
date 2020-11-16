@@ -15,6 +15,7 @@ typedef struct
 
 
 /**********************************************************/
+
 void initPosition( Position * pos );
 //initializes position
 
@@ -36,6 +37,8 @@ int canJump( char row, char col, char player, Position * pos );
 int canJumpTo( char row, char col, char player, Position * pos, char rowDest, char colDest );
 // like canJump() it doesn't need row, col to be occupied by a piece.
 // Caution!!! does no checks if we are inside board
+
+int canPerformMove( char row, char col, char player, Position * pos );
 
 int canMove( Position * pos, char player );
 // determines if player can move

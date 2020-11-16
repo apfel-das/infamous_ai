@@ -455,8 +455,59 @@ int isLegal( Position * pos, Move * moveToCheck )
 
 
 
+int canPerformMove( char row, char col, char player, Position * pos ) 
+{
+	int returnValue = 0;
+	assert( ( player ==  WHITE ) || ( player == BLACK ) );
+	assert( row >= 0 && row < BOARD_ROWS );
+	assert( col >= 0 && col < BOARD_COLUMNS );
+	assert(pos != NULL);
+	if( player == WHITE )	//white player
+	{	
+		if( row + 1 < BOARD_ROWS)
+		{
+			if( col - 1 >= 0 )
+			{
+				if( (pos->board[ row + 1][ col - 1] == EMPTY)  || ( pos->board[ row + 1][ col - 1] == RTILE))
+				{
+					returnValue = returnValue + 1;	//left move possible
+				}
+			}
 
+			if( col + 1 < BOARD_COLUMNS )
+			{
+				if( (pos->board[ row + 1][ col + 1] == EMPTY)  || ( pos->board[ row + 1][ col + 1] == RTILE))
+				{
+					returnValue = returnValue + 2;	//right move possible
+				}
+			}
 
+		}
+	}
+	else	//black player
+	{
+		if( row - 1 >= 0 )
+		{
+			if( col - 1 >= 0 )
+			{
+				if( (pos->board[ row - 1][ col - 1] == EMPTY) ||(pos->board[ row - 1][ col - 1] == RTILE))
+				{
+					returnValue = returnValue + 1;	//left move possible
+				}
+			}
 
+			if( col + 1 < BOARD_COLUMNS )
+			{
+				if( (pos->board[ row - 1][ col + 1] == EMPTY) || (pos->board[ row - 1][ col + 1] == RTILE)) 
+				{
+					returnValue = returnValue + 2;	//right move possible
+				}
+			}
 
+		}
+	}
+
+	return returnValue;
+
+}
 
