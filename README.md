@@ -4,4 +4,4 @@ A repo to hold implimentations over various projects under the COMP417 - Artific
 - Contents:
     - searchWorld: Contains the implementation of BFS, DFS, A*, LRTA* searching techniques over a maze- given grid (Java).
     - genetic_algorithm: Contains the implementation of WHPP using a genetic algorithm (Python3).
-    - AntsGame: …(C11).
+    - AntsGame: An implementation of Checkers/Draughts game to showcase MiniMax, a-b prunning and Zorbrist Hashing techniques (C).
