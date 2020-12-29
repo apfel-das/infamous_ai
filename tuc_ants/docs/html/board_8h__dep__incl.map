@@ -1,0 +1,6 @@
+<map id="board.h" name="board.h">
+<area shape="rect" id="node1" title="Header file for the implementation of TUC&#45;Ants board." alt="" coords="41,5,106,32"/>
+<area shape="rect" id="node2" href="$client_8c.html" title="Actual entry point and implementation for agent&#39;s logic." alt="" coords="5,155,69,181"/>
+<area shape="rect" id="node3" href="$comm_8h_source.html" title=" " alt="" coords="39,80,108,107"/>
+<area shape="rect" id="node4" href="$gameServer_8h_source.html" title=" " alt="" coords="133,80,235,107"/>
+</map>

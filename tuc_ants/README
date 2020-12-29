@@ -1,25 +1,36 @@
 ***************************************************************
 *	  --------------				      *
 *	+ TUC-Ants v1.01 +				      *
-*	  --------------	  COMP417-AI, Spring 2020     *
+*	  --------------	  COMP417-AI, Spring 202x     *
 *							      *
 *-------------------------------------------------------------*
-* Affiliation: Technical University of Crete, Greece	      *
-* Customized by Charilaos Akasiadis			      *
+* Affiliation:		Technical University of Crete, Greece	      *
+* Customized by:	Charilaos Akasiadis			      *
 * Based on TUC Half-Checkers (COMP417-AI Project 2012)        *
 *			by Ioannis Skoulakis		      *
+* 
+* AI code[client .c, gameutils.h/.c]: apfel-das/ Kostantinos Pantelis.
+* Documentation[via doxygen]: apfel-das/Konstantinos Pantelis. 
+* Improvements/Bug fixes: apfel-das/Konstantinos Pantelis.
 ***************************************************************
 
 Requirements:
 
 	* any Linux distribution
+	* development package libgtk2.0-dev [associated with the graphics]
+
+Set Up [on Ubuntu version > 16.04]:
+ 
+  * "$ sudo apt-get install build-essential libgtk2.0-dev" to download and install the gui dependencies.
+  
+
 
 Compilation: 
 
-* make [all]  - to build client and server
-* make client - to build just the client
-* make server - to build just the server
-* make guiServer - to build just the guiServer
+	* make [all]  - to build client and server
+	* make client - to build just the client
+	* make server - to build just the server
+	* make guiServer - to build just the guiServer
 
 Execution: 
 
@@ -30,7 +41,19 @@ Execution:
 
 Changes in last version:
 
-	-Client sends the desired move to server and server 
+	- Client sends the desired move to server and server 
 	 executes doMove. Server sends new position to clients
-	 after every move made.
+	 after every move made. 
+
+Documentation provided:
+	
+	- Since 2020 apfel-das, provided documentation on the source code via Doxygen tool. The documentation can be found under "docs" dir.
+	- Acces via: 
+		"$ cd doc/html"
+		"$ firefox index.html" or "$ chrome index.html" or "$ <your_fav_browser_exec_cmd index.html>"
+
+Bug Fixes:
+
+	- Minor bug fix concerning the usage of "isprint" function causing warnings upon compilation, resolved via including "ctype.h"
+		
 

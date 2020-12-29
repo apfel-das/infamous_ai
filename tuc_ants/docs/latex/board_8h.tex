@@ -1,0 +1,259 @@
+\hypertarget{board_8h}{}\doxysection{board.\+h File Reference}
+\label{board_8h}\index{board.h@{board.h}}
+
+
+Header file for the implementation of T\+U\+C-\/\+Ants board.  
+
+
+{\ttfamily \#include \char`\"{}global.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}move.\+h\char`\"{}}\newline
+Include dependency graph for board.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=157pt]{board_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{board_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structPosition}{Position}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{board_8h_a610edd7b0970f9c6b53482a721200692}{init\+Position}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$pos)
+\begin{DoxyCompactList}\small\item\em Initializes the position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_a6ca46b88d31a8b9095f2ade4e982ba0e}{print\+Board}} (char board\mbox{[}B\+O\+A\+R\+D\+\_\+\+R\+O\+WS\mbox{]}\mbox{[}B\+O\+A\+R\+D\+\_\+\+C\+O\+L\+U\+M\+NS\mbox{]})
+\begin{DoxyCompactList}\small\item\em Prints a board. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_aff2eec0a96b4c84772c319221069d9ab}{print\+Position}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$pos)
+\begin{DoxyCompactList}\small\item\em Prints a position along with player\textquotesingle{}s turn and score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_afd055c1ce12f7f357afe65a8aed871ff}{do\+Move}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$pos, \mbox{\hyperlink{structMove}{Move}} $\ast$move\+To\+Do)
+\begin{DoxyCompactList}\small\item\em Does a move on the position specified. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{board_8h_a9ff35cda6109583f0c114519db984779}{can\+Jump}} (char row, char col, char player, \mbox{\hyperlink{structPosition}{Position}} $\ast$pos)
+\begin{DoxyCompactList}\small\item\em Determines ability to jump. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{board_8h_ab6d12749b5901f200145b5091b6393c5}{can\+Jump\+To}} (char row, char col, char player, \mbox{\hyperlink{structPosition}{Position}} $\ast$pos, char row\+Dest, char col\+Dest)
+\begin{DoxyCompactList}\small\item\em Determines ability to jump to a specific cell. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{board_8h_ae5513d828927b8fb7fb8ef43dbeffdd4}{can\+Move}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$pos, char player)
+\begin{DoxyCompactList}\small\item\em Determines ability to move on any direction. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{board_8h_aeb5e7d84f188bccd1e497638e66dd45c}{is\+Legal}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$pos, \mbox{\hyperlink{structMove}{Move}} $\ast$move\+To\+Check)
+\begin{DoxyCompactList}\small\item\em Determines if a move is legal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for the implementation of T\+U\+C-\/\+Ants board. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sometime in 2012 
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{board_8h_a9ff35cda6109583f0c114519db984779}\label{board_8h_a9ff35cda6109583f0c114519db984779}} 
+\index{board.h@{board.h}!canJump@{canJump}}
+\index{canJump@{canJump}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{canJump()}{canJump()}}
+{\footnotesize\ttfamily int can\+Jump (\begin{DoxyParamCaption}\item[{char}]{row,  }\item[{char}]{col,  }\item[{char}]{player,  }\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos }\end{DoxyParamCaption})}
+
+
+
+Determines ability to jump. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em row} & The row \\
+\hline
+\mbox{\texttt{ in}}  & {\em col} & The col \\
+\hline
+\mbox{\texttt{ in}}  & {\em player} & The player \\
+\hline
+ & {\em pos} & The position \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+It can also be used to determine if we can make a jump from a position we do not occupy. This would happen by providing the proper \mbox{[}row, col\mbox{]} tuple of the desired cell. 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+One of following values (0, 1, 2 or 3)\+: \begin{DoxyVerb}            - 1 if left jump can be done. 
+            - 2 if right jump can be done. 
+            - 3 if both directions can be jumped. 
+            - 0 if no jump is possible.
+\end{DoxyVerb}
+ 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Does not check if we are inside the board 
+\end{DoxyWarning}
+\mbox{\Hypertarget{board_8h_ab6d12749b5901f200145b5091b6393c5}\label{board_8h_ab6d12749b5901f200145b5091b6393c5}} 
+\index{board.h@{board.h}!canJumpTo@{canJumpTo}}
+\index{canJumpTo@{canJumpTo}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{canJumpTo()}{canJumpTo()}}
+{\footnotesize\ttfamily int can\+Jump\+To (\begin{DoxyParamCaption}\item[{char}]{row,  }\item[{char}]{col,  }\item[{char}]{player,  }\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos,  }\item[{char}]{row\+Dest,  }\item[{char}]{col\+Dest }\end{DoxyParamCaption})}
+
+
+
+Determines ability to jump to a specific cell. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em row} & The row \\
+\hline
+\mbox{\texttt{ in}}  & {\em col} & The col \\
+\hline
+\mbox{\texttt{ in}}  & {\em player} & The player \\
+\hline
+ & {\em pos} & The position \\
+\hline
+\mbox{\texttt{ in}}  & {\em row\+Dest} & The row destination \\
+\hline
+\mbox{\texttt{ in}}  & {\em col\+Dest} & The col destination \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+It can also be used to determine if we can make a jump from a position we do not occupy just like \mbox{\hyperlink{board_8h_a9ff35cda6109583f0c114519db984779}{can\+Jump()}}. 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+True if able to jump to, False otherwise. 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Does not check if we are inside the board. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{board_8h_ae5513d828927b8fb7fb8ef43dbeffdd4}\label{board_8h_ae5513d828927b8fb7fb8ef43dbeffdd4}} 
+\index{board.h@{board.h}!canMove@{canMove}}
+\index{canMove@{canMove}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{canMove()}{canMove()}}
+{\footnotesize\ttfamily int can\+Move (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos,  }\item[{char}]{player }\end{DoxyParamCaption})}
+
+
+
+Determines ability to move on any direction. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em pos} & The position \\
+\hline
+\mbox{\texttt{ in}}  & {\em player} & The player\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if able to move, False otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{board_8h_afd055c1ce12f7f357afe65a8aed871ff}\label{board_8h_afd055c1ce12f7f357afe65a8aed871ff}} 
+\index{board.h@{board.h}!doMove@{doMove}}
+\index{doMove@{doMove}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{doMove()}{doMove()}}
+{\footnotesize\ttfamily void do\+Move (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos,  }\item[{\mbox{\hyperlink{structMove}{Move}} $\ast$}]{move\+To\+Do }\end{DoxyParamCaption})}
+
+
+
+Does a move on the position specified. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position \\
+\hline
+{\em move\+To\+Do} & The move to do \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Does not check if move is legal! It simply does the move. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{board_8h_a610edd7b0970f9c6b53482a721200692}\label{board_8h_a610edd7b0970f9c6b53482a721200692}} 
+\index{board.h@{board.h}!initPosition@{initPosition}}
+\index{initPosition@{initPosition}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{initPosition()}{initPosition()}}
+{\footnotesize\ttfamily void init\+Position (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos }\end{DoxyParamCaption})}
+
+
+
+Initializes the position. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{board_8h_aeb5e7d84f188bccd1e497638e66dd45c}\label{board_8h_aeb5e7d84f188bccd1e497638e66dd45c}} 
+\index{board.h@{board.h}!isLegal@{isLegal}}
+\index{isLegal@{isLegal}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{isLegal()}{isLegal()}}
+{\footnotesize\ttfamily int is\+Legal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos,  }\item[{\mbox{\hyperlink{structMove}{Move}} $\ast$}]{move\+To\+Check }\end{DoxyParamCaption})}
+
+
+
+Determines if a move is legal. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position \\
+\hline
+{\em move\+To\+Check} & The move to check\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if legal, False otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{board_8h_a6ca46b88d31a8b9095f2ade4e982ba0e}\label{board_8h_a6ca46b88d31a8b9095f2ade4e982ba0e}} 
+\index{board.h@{board.h}!printBoard@{printBoard}}
+\index{printBoard@{printBoard}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{printBoard()}{printBoard()}}
+{\footnotesize\ttfamily void print\+Board (\begin{DoxyParamCaption}\item[{char}]{board\mbox{[}\+B\+O\+A\+R\+D\+\_\+\+R\+O\+W\+S\mbox{]}\mbox{[}\+B\+O\+A\+R\+D\+\_\+\+C\+O\+L\+U\+M\+N\+S\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Prints a board. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em board} & The board \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{board_8h_aff2eec0a96b4c84772c319221069d9ab}\label{board_8h_aff2eec0a96b4c84772c319221069d9ab}} 
+\index{board.h@{board.h}!printPosition@{printPosition}}
+\index{printPosition@{printPosition}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{printPosition()}{printPosition()}}
+{\footnotesize\ttfamily void print\+Position (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structPosition}{Position}} $\ast$}]{pos }\end{DoxyParamCaption})}
+
+
+
+Prints a position along with player\textquotesingle{}s turn and score. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position \\
+\hline
+\end{DoxyParams}

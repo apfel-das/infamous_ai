@@ -1,0 +1,95 @@
+\hypertarget{client_8c}{}\doxysection{client.\+c File Reference}
+\label{client_8c}\index{client.c@{client.c}}
+
+
+Actual entry point and implementation for agent\textquotesingle{}s logic.  
+
+
+{\ttfamily \#include \char`\"{}global.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}board.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}move.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}comm.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}gameutils.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+Include dependency graph for client.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{client_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{client_8c_a2fb908965bd8a14c582a472e22dab5d0}\label{client_8c_a2fb908965bd8a14c582a472e22dab5d0}} 
+\mbox{\hyperlink{structmovelist}{movelist}} $\ast$ {\bfseries generate\+\_\+moves} (\mbox{\hyperlink{structPosition}{Position}} $\ast$curr)
+\item 
+int \mbox{\hyperlink{client_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em Main entry point for client\textquotesingle{}s functionality. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{client_8c_aad3b0238927d41b6558ec93586fd5b69}\label{client_8c_aad3b0238927d41b6558ec93586fd5b69}} 
+\mbox{\hyperlink{structPosition}{Position}} {\bfseries game\+Position}
+\item 
+\mbox{\Hypertarget{client_8c_a143dba637dbc4a6d58a01c774c6bdb13}\label{client_8c_a143dba637dbc4a6d58a01c774c6bdb13}} 
+\mbox{\hyperlink{structMove}{Move}} {\bfseries my\+Move}
+\item 
+\mbox{\Hypertarget{client_8c_a108165360b387fa78fc3de95ac537a89}\label{client_8c_a108165360b387fa78fc3de95ac537a89}} 
+char {\bfseries my\+Color}
+\item 
+\mbox{\Hypertarget{client_8c_a8186d0b3c7e23f8acd8f13c98e5eaf28}\label{client_8c_a8186d0b3c7e23f8acd8f13c98e5eaf28}} 
+int {\bfseries my\+Socket}
+\item 
+\mbox{\Hypertarget{client_8c_ae82f04b6f1eae869e0c907b62420e2bd}\label{client_8c_ae82f04b6f1eae869e0c907b62420e2bd}} 
+char $\ast$ {\bfseries agent\+Name} = \char`\"{}chaos\char`\"{}
+\item 
+\mbox{\Hypertarget{client_8c_afbc356cd0e25d1dbbece7c10fd025fa6}\label{client_8c_afbc356cd0e25d1dbbece7c10fd025fa6}} 
+char $\ast$ {\bfseries ip} = \char`\"{}127.\+0.\+0.\+1\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Actual entry point and implementation for agent\textquotesingle{}s logic. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence Lab (Antonis Vogiatzis, Charilaos Akasiadis, Ioannis Skoulakis). 
+
+apfel-\/das (Konstantinos Pantelis), Christos Trimmas. 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28 Dec, 2020
+\end{DoxyDate}
+The client responds to server\textquotesingle{}s move request by sending a $<$\+Mffove$>$ object. \begin{DoxySeeAlso}{See also}
+\char`\"{}client.\+h\char`\"{} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{client_8c_a3c04138a5bfe5d72780bb7e82a18e627}\label{client_8c_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{client.c@{client.c}!main@{main}}
+\index{main@{main}!client.c@{client.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+Main entry point for client\textquotesingle{}s functionality. 
+
+\begin{DoxyAuthor}{Author}
+Intelligence T\+UC. 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em argc} & The count of arguments \\
+\hline
+ & {\em argv} & The arguments array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\{ description\+\_\+of\+\_\+the\+\_\+return\+\_\+value \} 
+\end{DoxyReturn}
+Actual Client\textquotesingle{}s functionality when playing. AI method calls and functions should have this as an entry point.

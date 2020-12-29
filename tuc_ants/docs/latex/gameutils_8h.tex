@@ -1,0 +1,194 @@
+\hypertarget{gameutils_8h}{}\doxysection{gameutils.\+h File Reference}
+\label{gameutils_8h}\index{gameutils.h@{gameutils.h}}
+
+
+Header file for the implementation of a double linked list containing $<$\+Move$>$ (s).  
+
+
+{\ttfamily \#include \char`\"{}move.\+h\char`\"{}}\newline
+Include dependency graph for gameutils.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=147pt]{gameutils_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=147pt]{gameutils_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structnode}{node}}
+\item 
+struct \mbox{\hyperlink{structmovelist}{movelist}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structnode}{node}} \mbox{\hyperlink{gameutils_8h_af4aeda155dbe167f1c1cf38cb65bf324}{node}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{gameutils_8h_a3ec96e96583dab5546085a28be393f3d}{list\+\_\+init}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l)
+\begin{DoxyCompactList}\small\item\em Initializes a double linked list of $<$\+Moves$>$ by setting fields to N\+U\+LL. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{gameutils_8h_a6ed120874d2a0f622d301d184907c47c}{empty\+\_\+list}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l)
+\begin{DoxyCompactList}\small\item\em Empties a list of moves. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{gameutils_8h_affa0aea3dcd0a71af48ae71976d097b4}{free\+\_\+list}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l)
+\begin{DoxyCompactList}\small\item\em Frees the whole list. Empties nodes and then whipes the head pointer as well. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{gameutils_8h_ae9f449fdf281dadc3d7385f49572e78b}{push}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l, \mbox{\hyperlink{structMove}{Move}} $\ast$move)
+\begin{DoxyCompactList}\small\item\em Pushes a $<$\+Move$>$ inside the list. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structMove}{Move}} $\ast$ \mbox{\hyperlink{gameutils_8h_a03e729bd68ef50c2b0bef03b9c9de27d}{pop}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l)
+\begin{DoxyCompactList}\small\item\em Pops the given l. Moves head on next. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structMove}{Move}} $\ast$ \mbox{\hyperlink{gameutils_8h_a6c4e7acdbb24b568d14b8b54cd48654d}{top}} (\mbox{\hyperlink{structmovelist}{movelist}} $\ast$l)
+\begin{DoxyCompactList}\small\item\em Returns a reference to the current head\textquotesingle{}s $<$\+Move$>$ object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for the implementation of a double linked list containing $<$\+Move$>$ (s). 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28 Dec, 2020 
+\end{DoxyDate}
+\begin{DoxySeeAlso}{See also}
+\char`\"{}move.\+h\char`\"{} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{gameutils_8h_af4aeda155dbe167f1c1cf38cb65bf324}\label{gameutils_8h_af4aeda155dbe167f1c1cf38cb65bf324}} 
+\index{gameutils.h@{gameutils.h}!node@{node}}
+\index{node@{node}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{node}{node}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structnode}{node}} \mbox{\hyperlink{structnode}{node}}}
+
+The basic entity of information concerning moves.. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{gameutils_8h_a6ed120874d2a0f622d301d184907c47c}\label{gameutils_8h_a6ed120874d2a0f622d301d184907c47c}} 
+\index{gameutils.h@{gameutils.h}!empty\_list@{empty\_list}}
+\index{empty\_list@{empty\_list}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{empty\_list()}{empty\_list()}}
+{\footnotesize\ttfamily void empty\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l }\end{DoxyParamCaption})}
+
+
+
+Empties a list of moves. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & The head of the list. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{gameutils_8h_affa0aea3dcd0a71af48ae71976d097b4}\label{gameutils_8h_affa0aea3dcd0a71af48ae71976d097b4}} 
+\index{gameutils.h@{gameutils.h}!free\_list@{free\_list}}
+\index{free\_list@{free\_list}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{free\_list()}{free\_list()}}
+{\footnotesize\ttfamily void free\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l }\end{DoxyParamCaption})}
+
+
+
+Frees the whole list. Empties nodes and then whipes the head pointer as well. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & The head of the list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Calls the \char`\"{}empty\+\_\+list\char`\"{} function 
+\end{DoxyNote}
+\mbox{\Hypertarget{gameutils_8h_a3ec96e96583dab5546085a28be393f3d}\label{gameutils_8h_a3ec96e96583dab5546085a28be393f3d}} 
+\index{gameutils.h@{gameutils.h}!list\_init@{list\_init}}
+\index{list\_init@{list\_init}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{list\_init()}{list\_init()}}
+{\footnotesize\ttfamily void list\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l }\end{DoxyParamCaption})}
+
+
+
+Initializes a double linked list of $<$\+Moves$>$ by setting fields to N\+U\+LL. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & The head of the list. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{gameutils_8h_a03e729bd68ef50c2b0bef03b9c9de27d}\label{gameutils_8h_a03e729bd68ef50c2b0bef03b9c9de27d}} 
+\index{gameutils.h@{gameutils.h}!pop@{pop}}
+\index{pop@{pop}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{pop()}{pop()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMove}{Move}}$\ast$ pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l }\end{DoxyParamCaption})}
+
+
+
+Pops the given l. Moves head on next. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & Element to be popped. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The popped element\textquotesingle{}s $<$\+Move$>$. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{gameutils_8h_ae9f449fdf281dadc3d7385f49572e78b}\label{gameutils_8h_ae9f449fdf281dadc3d7385f49572e78b}} 
+\index{gameutils.h@{gameutils.h}!push@{push}}
+\index{push@{push}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily void push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l,  }\item[{\mbox{\hyperlink{structMove}{Move}} $\ast$}]{move }\end{DoxyParamCaption})}
+
+
+
+Pushes a $<$\+Move$>$ inside the list. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & The head of the list. \\
+\hline
+{\em move} & The move object. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{gameutils_8h_a6c4e7acdbb24b568d14b8b54cd48654d}\label{gameutils_8h_a6c4e7acdbb24b568d14b8b54cd48654d}} 
+\index{gameutils.h@{gameutils.h}!top@{top}}
+\index{top@{top}!gameutils.h@{gameutils.h}}
+\doxysubsubsection{\texorpdfstring{top()}{top()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMove}{Move}}$\ast$ top (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmovelist}{movelist}} $\ast$}]{l }\end{DoxyParamCaption})}
+
+
+
+Returns a reference to the current head\textquotesingle{}s $<$\+Move$>$ object. 
+
+\begin{DoxyAuthor}{Author}
+apfel-\/das 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & The head of the list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The $<$\+Move$>$ object on top. 
+\end{DoxyReturn}
