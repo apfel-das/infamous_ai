@@ -16,12 +16,29 @@ public class AStar extends Search {
 
 	protected final int MOVE_COST;
 	
+	/**
+	 
+	 Class constructor
+
+	 */
 	public AStar(int mCost) 
 	{
 		//cost of horizontal, vertical movement through a bush.
 		MOVE_COST = mCost;
 		
 	}
+
+
+
+	/**
+	 * @brief 	   Solves the maze by implementing a A-Star (A*) search on Nodes.
+	 * @brief 	   
+	 * @param      mygrid  The grid
+	 * @param      N       Grid's rows.
+	 * @param      M       Grid's collumns.
+	 * @warning    Uses a Stack
+	 * @return     The head Node of the solution path. 
+	 */
 
 	@Override
 	public Node solve(Grid mygrid, int N, int M) 
@@ -99,7 +116,10 @@ public class AStar extends Search {
 		return null;
 	}
 
-	// Inner Class.
+	/**
+	 * This class describes an extension of a Node in order to bind heuristics to the Node.
+	 * @author apfel-das 
+	 */
 	class Pair implements Comparable<Object> 
 	{
 

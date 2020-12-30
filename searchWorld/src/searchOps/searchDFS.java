@@ -8,6 +8,15 @@ import setup.Node;
 
 public class searchDFS extends Search{
 
+	/**
+	 * @brief 	   Solves the maze by implementing a Depth-First Search (DFS) on Nodes.
+	 * @brief 	   
+	 * @param      mygrid  The grid
+	 * @param      N       Grid's rows.
+	 * @param      M       Grid's collumns.
+	 * 
+	 * @return     The head Node of the solution path. 
+	 */
 	@Override
 	public Node solve(Grid mygrid, int N, int M) {
 		
